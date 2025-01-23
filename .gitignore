@@ -13,7 +13,7 @@
 mkpkg-temp
 
 # options
-/.libreelec
+#/.libreelec
 
 # private working directory
 /.work/
