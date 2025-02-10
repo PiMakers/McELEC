@@ -3,8 +3,8 @@
 # Copyright (C) 2021-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="vulkan-tools"
-PKG_VERSION="1.4.305"
-PKG_SHA256="55c25e50172428f36e63cc9644c25fcda2a558b31158283f2cbba685f0b94572"
+PKG_VERSION="1.4.307"
+PKG_SHA256="4f0baeaf078c2a9d298b87d6d6ef85c3faf08f0f95b8a7d7d7ff243c6de2707c"
 PKG_LICENSE="Apache-2.0"
 PKG_SITE="https://github.com/KhronosGroup/Vulkan-Tools"
 PKG_URL="https://github.com/KhronosGroup/Vulkan-tools/archive/v${PKG_VERSION}.tar.gz"
@@ -16,7 +16,7 @@ configure_package() {
   if [ "${DISPLAYSERVER}" = "x11" ]; then
     PKG_DEPENDS_TARGET+=" libxcb libX11"
   elif [ "${DISPLAYSERVER}" = "wl" ]; then
-    PKG_DEPENDS_TARGET+=" wayland"
+    PKG_DEPENDS_TARGET+=" wayland wayland-protocols"
   fi
 }
 
@@ -59,6 +59,6 @@ pre_make_target() {
 }
 
 post_makeinstall_target() {
-  # Clean up - two graphic test tools are superflous
+  # Clean up - two graphic test tools are superfluous
   safe_remove ${INSTALL}/usr/bin/vkcubepp
 }
