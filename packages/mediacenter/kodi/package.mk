@@ -3,12 +3,12 @@
 # Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="kodi"
-PKG_VERSION="87917079958ad5609be9f8fe3379823fa364205d"
-PKG_SHA256="faf66ba9e565f5ae11a8d146cf5ccb7770f13b0077bcde2c0d71af3f6a7afc0a"
+PKG_VERSION="ce89e7d9c62e800d5914d719ce5e22804d37c3b3"
+PKG_SHA256="65339cfad8efd52975d13474b088187f7afb9adc169e70c0e07b6aa52ddeb14d"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.kodi.tv"
 PKG_URL="https://github.com/xbmc/xbmc/archive/${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_TARGET="toolchain JsonSchemaBuilder:host TexturePacker:host Python3 zlib systemd lzo pcre2 swig:host libass curl exiv2 fontconfig fribidi tinyxml tinyxml2 libjpeg-turbo freetype libcdio taglib libxml2 libxslt rapidjson sqlite ffmpeg crossguid libdvdnav libfmt lirc libfstrcmp flatbuffers:host flatbuffers libudfread spdlog libxkbcommon"
+PKG_DEPENDS_TARGET="toolchain JsonSchemaBuilder:host TexturePacker:host Python3 zlib systemd lzo pcre2 swig:host libass curl exiv2 fontconfig fribidi tinyxml tinyxml2 libjpeg-turbo freetype libcdio taglib libxml2 libxslt nlohmann-json sqlite ffmpeg crossguid libdvdnav libfmt lirc libfstrcmp flatbuffers:host flatbuffers libudfread spdlog libxkbcommon"
 PKG_DEPENDS_UNPACK="commons-lang3 commons-text groovy"
 PKG_DEPENDS_HOST="toolchain"
 PKG_LONGDESC="A free and open source cross-platform media player."
@@ -58,6 +58,24 @@ configure_package() {
                    -DAPP_RENDER_SYSTEM=gles \
                    -DWAYLANDPP_SCANNER=${TOOLCHAIN}/bin/wayland-scanner++ \
                    -DWAYLANDPP_PROTOCOLS_DIR=${SYSROOT_PREFIX}/usr/share/waylandpp/protocols"
+  else # GBM
+    if [ ! "${KODIPLAYER_DRIVER}" = "default" ]; then
+      PKG_DEPENDS_TARGET+=" ${KODIPLAYER_DRIVER}"
+    fi
+    PKG_DEPENDS_TARGET+=" libinput libdisplay-info"
+    KODI_PLATFORM="-DCORE_PLATFORM_NAME=gbm"
+    if [ ! "${OPENGL}" = "no" ]; then
+      KODI_PLATFORM+=" -DAPP_RENDER_SYSTEM=gl"
+    else
+      KODI_PLATFORM+=" -DAPP_RENDER_SYSTEM=gles"
+    fi
+    CFLAGS+=" -DEGL_NO_X11"
+    CXXFLAGS+=" -DEGL_NO_X11"
+    if [ "${PROJECT}" = "Generic" ]; then
+      PKG_APPLIANCE_XML="${PKG_DIR}/config/appliance-gbm-generic.xml"
+    else
+      PKG_APPLIANCE_XML="${PKG_DIR}/config/appliance-gbm.xml"
+    fi 
   fi
 
   if [ ! "${OPENGL}" = "no" ]; then
@@ -217,20 +235,6 @@ configure_package() {
     KODI_ARCH="-DWITH_ARCH=${TARGET_ARCH}"
   fi
 
-  if [ ! "${KODIPLAYER_DRIVER}" = "default" -a "${DISPLAYSERVER}" = "no" ]; then
-    PKG_DEPENDS_TARGET+=" ${KODIPLAYER_DRIVER} libinput libdisplay-info"
-    if [ "${OPENGLES_SUPPORT}" = yes -a "${KODIPLAYER_DRIVER}" = "${OPENGLES}" ]; then
-      KODI_PLATFORM="-DCORE_PLATFORM_NAME=gbm -DAPP_RENDER_SYSTEM=gles"
-      CFLAGS+=" -DEGL_NO_X11"
-      CXXFLAGS+=" -DEGL_NO_X11"
-      if [ "${PROJECT}" = "Generic" ]; then
-        PKG_APPLIANCE_XML="${PKG_DIR}/config/appliance-gbm-generic.xml"
-      else
-        PKG_APPLIANCE_XML="${PKG_DIR}/config/appliance-gbm.xml"
-      fi
-    fi
-  fi
-
   if [ "${PROJECT}" = "Allwinner" -o "${PROJECT}" = "Rockchip" -o "${PROJECT}" = "RPi" ]; then
     PKG_PATCH_DIRS+=" drmprime-filter"
   fi
@@ -250,9 +254,7 @@ configure_package() {
                          -DENABLE_INTERNAL_EXIV2=OFF \
                          -DENABLE_INTERNAL_FFMPEG=OFF \
                          -DENABLE_INTERNAL_FLATBUFFERS=OFF \
-                         -DENABLE_INTERNAL_RapidJSON=OFF \
                          -DENABLE_INTERNAL_SPDLOG=OFF \
-                         -DENABLE_INTERNAL_UDFREAD=OFF \
                          -DENABLE_UDEV=ON \
                          -DENABLE_DBUS=ON \
                          -DENABLE_XSLT=ON \

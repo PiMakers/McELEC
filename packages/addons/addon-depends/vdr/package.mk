@@ -4,8 +4,8 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="vdr"
-PKG_VERSION="2.7.3"
-PKG_SHA256="adc89e3ba269793464db1aa0f7a34001370035f16e881b47d72043212afb57c0"
+PKG_VERSION="2.7.5"
+PKG_SHA256="e1f1c46f984dfcb4f1a00bf16010dcb863ffaaf31b87872bd90c7cf800129f99"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.tvdr.de"
 PKG_URL="http://git.tvdr.de/?p=vdr.git;a=snapshot;h=refs/tags/${PKG_VERSION};sf=tbz2"

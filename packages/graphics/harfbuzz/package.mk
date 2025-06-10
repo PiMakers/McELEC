@@ -3,8 +3,8 @@
 # Copyright (C) 2016-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="harfbuzz"
-PKG_VERSION="10.2.0"
-PKG_SHA256="620e3468faec2ea8685d32c46a58469b850ef63040b3565cde05959825b48227"
+PKG_VERSION="11.2.1"
+PKG_SHA256="093714c8548a285094685f0bdc999e202d666b59eeb3df2ff921ab68b8336a49"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.freedesktop.org/wiki/Software/HarfBuzz"
 PKG_URL="https://github.com/harfbuzz/harfbuzz/releases/download/${PKG_VERSION}/harfbuzz-${PKG_VERSION}.tar.xz"
